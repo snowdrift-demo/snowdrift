@@ -667,11 +667,11 @@ decrementUnderfunded projId = do
 dropAllUnderfunded :: DBConstraint m
                    => ProjectId -> WriterT DropShares (SqlPersistT m) ()
 dropAllUnderfunded projId = do
-    turdlings <- lift $ decrementUnderfunded projId
-    case turdlings of
+    unders <- lift $ decrementUnderfunded projId
+    case unders of
         [] -> return ()
         _  -> do
-            tell turdlings
+            tell unders
             dropAllUnderfunded projId
 
 -- | Fold some DropShares into EventDeactivatedPledges, one per affected
